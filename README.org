@@ -1,0 +1,33 @@
+* lsp-vtsls
+
+The Emacs [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] client for [[https://github.com/yioneko/vtsls][vtsls]] , which is an LSP wrapper around TypeScript extension bundled with VSCode.
+
+* Installation
+** Doom Emacs
+Add =lsp-vtsls=:
+
+#+begin_src elisp
+;; packages.el
+(package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
+
+;; config.el
+(use-package! lsp-vtsls
+  :after lsp-mode)
+#+end_src
+
+Install =vtsls= LSP:
+
++ =M+x lsp-install-server= then select =vtsls= .
+
+* Recommended Setup
+#+begin_src elisp
+(use-package! lsp-vtsls
+  :after lsp-mode
+  :config
+  (setq
+   ;; show all LSP doc on minibuffer
+   lsp-eldoc-render-all t
+   ;; https://github.com/yioneko/vtsls#bad-performance-of-completion
+   lsp-vtsls-server-side-fuzzy-match t
+   lsp-vtsls-entries-limit 10))
+#+end_src
