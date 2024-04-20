@@ -57,6 +57,30 @@ with higher accuracy."
   :package-version '(lsp-mode . "9.0.0")
   :lsp-path "vtsls.experimental.completion.entriesLimit")
 
+(defcustom-lsp lsp-vtsls-auto-use-workspace-tsdk nil
+  "Automatically use workspace version of TypeScript lib on startup.
+By default, the bundled version is used for intelliSense."
+  :type 'boolean
+  :group 'lsp-vtsls
+  :package-version '(lsp-mode . "9.0.0")
+  :lsp-path "vtsls.autoUseWorkspaceTsdk")
+
+(defcustom-lsp lsp-vtsls-typescript-global-tsdk nil
+  "Set global TypeScript lib path"
+  :type 'string
+  :group 'lsp-vtsls
+  :package-version '(lsp-mode . "9.0.0")
+  :lsp-path "vtsls.typescript.globalTsdk")
+
+(defcustom-lsp lsp-vtsls-enable-move-to-file-code-action nil
+  "Enable 'Move to file' code action.
+This action enables user to move code to existing file,
+but requires corresponding handling on the client side."
+  :type 'boolean
+  :group 'lsp-vtsls
+  :package-version '(lsp-mode . "9.0.0")
+  :lsp-path "vtsls.enableMoveToFileCodeAction")
+
 (lsp-dependency 'vtsls-language-server
                 '(:system "vtsls")
                 '(:npm :package "@vtsls/language-server" :path "vtsls"))
@@ -71,7 +95,6 @@ with higher accuracy."
   :multi-root t
   :server-id 'vtsls
   :initialization-options (lambda () (ht-merge
-                                 (lsp-configuration-section "typescript")
                                  (lsp-configuration-section "vtsls")))
   :initialized-fn (lambda (workspace)
                     (with-lsp-workspace workspace
