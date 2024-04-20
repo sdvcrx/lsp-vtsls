@@ -40,24 +40,22 @@
   :link '(url-link "https://github.com/yioneko/vtsls")
   :package-version '(lsp-mode . "9.0.0"))
 
-(defcustom lsp-vtsls-server-side-fuzzy-match nil
+(defcustom-lsp lsp-vtsls-server-side-fuzzy-match nil
   "Execute fuzzy match of completion items on server side.
-Enable this will help filter out useless completion items from tsserver"
+Enable this will help filter out useless completion items from tsserver."
   :type 'boolean
   :group 'lsp-vtsls
-  :package-version '(lsp-mode . "9.0.0"))
+  :package-version '(lsp-mode . "9.0.0")
+  :lsp-path "vtsls.experimental.completion.enableServerSideFuzzyMatch")
 
-(defcustom lsp-vtsls-entries-limit nil
+(defcustom-lsp lsp-vtsls-entries-limit nil
   "Maximum number of completion entries to return.
-Recommend to also toggle `enableServerSideFuzzyMatch` to
-preserve items with higher accuracy"
+Recommend to also toggle `enableServerSideFuzzyMatch` to preserve items
+with higher accuracy."
   :type 'number
   :group 'lsp-vtsls
-  :package-version '(lsp-mode . "9.0.0"))
-
-(lsp-register-custom-settings
-  '(("vtsls.experimental.completion.enableServerSideFuzzyMatch" lsp-vtsls-server-side-fuzzy-match t)
-    ("vtsls.experimental.completion.entriesLimit" lsp-vtsls-entries-limit)))
+  :package-version '(lsp-mode . "9.0.0")
+  :lsp-path "vtsls.experimental.completion.entriesLimit")
 
 (lsp-dependency 'vtsls-language-server
                 '(:system "vtsls")
@@ -77,6 +75,8 @@ preserve items with higher accuracy"
                                  (lsp-configuration-section "vtsls")))
   :initialized-fn (lambda (workspace)
                     (with-lsp-workspace workspace
+                      (lsp--set-configuration
+                       (lsp-configuration-section "vtsls"))
                       (lsp--server-register-capability
                        (lsp-make-registration
                         :id "random-id"
