@@ -70,7 +70,7 @@ preserve items with higher accuracy"
                      `(,(lsp-package-path 'vtsls-language-server) "--stdio")))
   :activation-fn (lsp-activate-on "javascript" "javascriptreact" "typescript" "typescriptreact")
   :priority -1
-  :multi-root nil
+  :multi-root t
   :server-id 'vtsls
   :initialization-options (lambda () (ht-merge
                                  (lsp-configuration-section "typescript")
