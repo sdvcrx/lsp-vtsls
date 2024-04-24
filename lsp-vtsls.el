@@ -81,6 +81,19 @@ but requires corresponding handling on the client side."
   :package-version '(lsp-mode . "9.0.0")
   :lsp-path "vtsls.enableMoveToFileCodeAction")
 
+(defcustom-lsp lsp-vtsls-typescript-global-plugins (vector)
+  "vtsls typescript-plugins"
+  :group 'lsp-vtsls
+  :package-version '(lsp-mode . "9.0.0")
+  :lsp-path "vtsls.tsserver.globalPlugins"
+  :type  '(restricted-sexp :tag "Vector"
+                           :match-alternatives
+                           (lambda (xs)
+                             (and (vectorp xs) (seq-every-p
+                                                (-lambda ((&plist :name :location :languages))
+                                                  (and name location))
+                                                xs)))))
+
 (lsp-dependency 'vtsls-language-server
                 '(:system "vtsls")
                 '(:npm :package "@vtsls/language-server" :path "vtsls"))
