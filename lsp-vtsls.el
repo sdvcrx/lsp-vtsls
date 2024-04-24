@@ -94,6 +94,12 @@ but requires corresponding handling on the client side."
                                                   (and name location))
                                                 xs)))))
 
+(defcustom lsp-vtsls-activate-languages '("javascript" "javascriptreact" "typescript" "typescriptreact")
+  "List of languages to enable vtsls for."
+  :group 'lsp-vtsls
+  :package-version '(lsp-mode . "9.0.0")
+  :type '(repeat string))
+
 (lsp-dependency 'vtsls-language-server
                 '(:system "vtsls")
                 '(:npm :package "@vtsls/language-server" :path "vtsls"))
@@ -103,7 +109,8 @@ but requires corresponding handling on the client side."
   :new-connection (lsp-stdio-connection
                    (lambda ()
                      `(,(lsp-package-path 'vtsls-language-server) "--stdio")))
-  :activation-fn (lsp-activate-on "javascript" "javascriptreact" "typescript" "typescriptreact")
+  :activation-fn (lambda (_file-name _mode)
+                   (-contains? lsp-vtsls-activate-languages (lsp-buffer-language)))
   :priority -1
   :multi-root t
   :server-id 'vtsls
