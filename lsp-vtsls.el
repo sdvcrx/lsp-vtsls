@@ -33,6 +33,7 @@
 ;;; Code:
 (require 'lsp-mode)
 (require 'json)
+(require 'lsp-javascript)
 
 (defgroup lsp-vtsls nil
   "LSP support for JavaScript and TypeScript."
@@ -100,6 +101,13 @@ but requires corresponding handling on the client side."
   :package-version '(lsp-mode . "9.0.0")
   :type '(repeat string))
 
+(defun lsp-vtsls-initialization-options ()
+  "Return the initialization options for vtsls."
+  (let ((opts (ht-create)))
+    (when lsp-clients-typescript-max-ts-server-memory
+      (lsp-ht-set opts '("typescript" "tsserver" "maxTsServerMemory") lsp-clients-typescript-max-ts-server-memory))
+    (ht-merge (lsp-configuration-section "vtsls") opts)))
+
 (lsp-dependency 'vtsls-language-server
                 '(:system "vtsls")
                 '(:npm :package "@vtsls/language-server" :path "vtsls"))
@@ -114,12 +122,10 @@ but requires corresponding handling on the client side."
   :priority -1
   :multi-root t
   :server-id 'vtsls
-  :initialization-options (lambda () (ht-merge
-                                 (lsp-configuration-section "vtsls")))
+  :initialization-options #'lsp-vtsls-initialization-options
   :initialized-fn (lambda (workspace)
                     (with-lsp-workspace workspace
-                      (lsp--set-configuration
-                       (lsp-configuration-section "vtsls"))
+                      (lsp--set-configuration (lsp-vtsls-initialization-options))
                       (lsp--server-register-capability
                        (lsp-make-registration
                         :id "random-id"
